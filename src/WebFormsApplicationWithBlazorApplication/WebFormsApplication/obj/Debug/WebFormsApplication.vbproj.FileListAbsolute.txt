@@ -175,3 +175,4 @@ D:\Data\Development\Development_Other\GitHubRepos\WebFormsWithBlazor\src\WebForm
 D:\Data\Development\Development_Other\GitHubRepos\WebFormsWithBlazor\src\WebFormsApplicationWithBlazorApplication\WebFormsApplication\obj\Debug\WebFormsApplication.dll
 D:\Data\Development\Development_Other\GitHubRepos\WebFormsWithBlazor\src\WebFormsApplicationWithBlazorApplication\WebFormsApplication\obj\Debug\WebForms_Basic.xml
 D:\Data\Development\Development_Other\GitHubRepos\WebFormsWithBlazor\src\WebFormsApplicationWithBlazorApplication\WebFormsApplication\obj\Debug\WebFormsApplication.pdb
+D:\Data\Development\Development_Other\GitHubRepos\WebFormsWithBlazor\src\WebFormsApplicationWithBlazorApplication\WebFormsApplication\obj\Debug\WebFormsApplication.vbprojAssemblyReference.cache
