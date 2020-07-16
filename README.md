@@ -1,5 +1,5 @@
 # WebFormsWithBlazor
-This repository is meant to demonstrate how to integrate a separate Blazor App using Web Forms Authentication.
+This repository is meant to demonstrate how to integrate authentication into a separate Blazor App project using Web Forms Authentication into an existing Web Forms application.
 
 Background: I have an old VB.NET Web Forms application using Forms Authentication. I have been wanting to start all new development using Blazor, but I didn't want my users to have to log on to both applications. It took me several weeks to figure out how to use my legacy Forms Authentication system with Blazor. The help documentation on the Microsoft website was extremely misleading. So, I have created this repository so that hopefully I can save somebody else this time.
 
