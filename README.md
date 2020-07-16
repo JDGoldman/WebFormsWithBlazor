@@ -31,4 +31,9 @@ The "-W" flag causes the command prompt to launch a wizard which will allow you 
 select the Sql Server and the database name.  For this project, I selected aspnetdb_test.
 2. Add roles and users to the Forms Authentication db.  I did this manually, which, I know, is a pain.  
 I will generate a script at a later point.
-3. You will need to modify your web.config file in three spots to use your own "Application Name" if you are using an existing aspnetdb.  You will also need to modify the appsettings.json file accordingly.  
+
+You will need to modify your web.config file in three spots to use your own "Application Name" if you are using an existing aspnetdb. You will also need to modify the appsettings.json file accordingly.  
+1. In the App Settings Key for Application Name.
+2. In the Membership Provider Key for applicationName.
+3. In the Role Manager Key for applicationName.  
+
