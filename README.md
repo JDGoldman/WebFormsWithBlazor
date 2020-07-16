@@ -3,7 +3,7 @@ This repository is meant to demonstrate how to integrate authentication from a A
 
 **Background**: I have an old VB.NET Web Forms application using Forms Authentication. I have been wanting to start all new development using Blazor, but I didn't want my users to have to log on to both applications separately. It took me several weeks to figure out how to use my legacy Forms Authentication system with Blazor. The help documentation on the Microsoft website was extremely misleading. I have created this repository so that hopefully I can save somebody else this time.
 
-The branches of this project are the various stages of integration of the two technologies.  
+The branches of this project are the various stages of integration of the two technologies:  
 
 1. Master is a new ASP.NET Web Forms project created by the Visual Studio wizard (note, no authentication added).  
 2. Step 1 is the modified ASP.NET Web Forms project to include all of the code and configuration changes to work with the Blazor App.
