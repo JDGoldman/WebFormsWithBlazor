@@ -26,10 +26,7 @@ However, if you want to create a test aspnetdb, please follow these steps:
 1. To configure your Sql Server edition for Forms Authentication, you need to run the Sql Server Registration Tool 
 located at %WINDIR%\Microsoft.Net\Framework\<.net version>\aspnet_regsql.exe -W
 The "-W" flag causes the command prompt to launch a wizard which will allow you to 
-select the Sql Server and the database name.  
-For this project, I selected aspnetdb_test.
-
+select the Sql Server and the database name.  For this project, I selected aspnetdb_test.
 2. Add roles and users to the Forms Authentication db.  I did this manually, which, I know, is a pain.  
 I will generate a script at a later point.
-
 3. You will need to modify your web.config file in three spots to use your own "Application Name" if you are using an existing aspnetdb.  You will also need to modify the appsettings.json file accordingly.  
