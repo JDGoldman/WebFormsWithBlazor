@@ -10,7 +10,7 @@ If you are interested in a server farm solution, this article provides some guid
 https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-3.1
 
 
-The premise of this application is that you already have an old, Web Forms Forms Authentication application setup,
+**Setup**: The premise of this application is that you already have an old, Web Forms Forms Authentication application setup,
 so you shouldn't need to create a new db.  You can just use your existing db. No changes are made to your db by this application. 
 However, if you want to create a test aspnetdb, please follow these steps:
 *1. To configure your Sql Server edition for Forms Authentication, you need to run the Sql Server Registration Tool 
