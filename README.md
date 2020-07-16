@@ -1,11 +1,20 @@
 # WebFormsWithBlazor
-This repository is meant to demonstrate how to integrate authentication into a separate Blazor App project using Web Forms Authentication into an existing Web Forms application.
+This repository is meant to demonstrate how to integrate authentication into a separate Blazor App project using ASP.NET Web Forms Authentication into an existing Web Forms application.
 
 **Background**: I have an old VB.NET Web Forms application using Forms Authentication. I have been wanting to start all new development using Blazor, but I didn't want my users to have to log on to both applications separately. It took me several weeks to figure out how to use my legacy Forms Authentication system with Blazor. The help documentation on the Microsoft website was extremely misleading. I have created this repository so that hopefully I can save somebody else this time.
 
 The branches of this project are the various stages of integration of the two technologies.  
 
-**Note**: This solution will not work on a server farm because it uses a file location to manage a shared key between the applications.
+1. Master is a new ASP.NET Web Forms project created by the Visual Studio wizard (note, no authentication added).  
+2. Step 1 is the modified ASP.NET Web Forms project to include all of the code and configuration changes to work with the Blazor App.
+3. Step 2 is the new Blazor Server application created by the Visual Studio wizard (note, no authentication added).
+4. Step 3 is the modified Blazor Server application to run with the Web Forms Authentication from the Web Forms project.
+
+**Several Notes**: 
+1.  All authentication is handled by the Web Forms application.  
+2.  If you are running this through Visual Studio/IIS Express, you will need to make sure both websites are running.  
+3.  The Blazor app may need to be refreshed after logging in or out.   
+4.  This solution will not work on a server farm because it uses a file location to manage a shared key between the applications.
 If you are interested in a server farm solution, this article provides some guidance:
 https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-3.1
 
