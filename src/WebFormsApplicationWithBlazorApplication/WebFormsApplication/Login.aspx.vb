@@ -7,70 +7,42 @@ Public Class Login
 
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        'If Not Page.IsPostBack Then
         If Request.QueryString("Logout") IsNot Nothing Then
             Logout()
         End If
-        'End If
     End Sub
 
     Private Sub btnSubmit_Click(sender As Object, e As EventArgs) Handles btnSubmit.Click
-        If ValidateUser(tbUserName.Text, tbPassword.Text) Then
-            Logon(tbUserName.Text)
+        If tbUserName.Text.Length > 0 And tbPassword.Text.Length > 0 Then 'perform other validation logic as needed
+            If Membership.ValidateUser(tbUserName.Text, tbPassword.Text) Then
+                Logon(tbUserName.Text)
+            Else
+                lblMessage.Text = "Credentials were not valid."
+            End If
+        Else
+            lblMessage.Text = "You must enter both a user name and password. "
         End If
     End Sub
-    Private Function ValidateUser(UserName As String, Password As String) As Boolean
-        Return True
-    End Function
     Private Sub Logon(UserName As String)
-        Dim tkt As FormsAuthenticationTicket
-        Dim cookiestr As String
-        Dim ck As HttpCookie
+        Dim lh As New LoginHelper
         Dim persistCookie As Boolean = True
 
-        tkt = New FormsAuthenticationTicket(1, UserName, System.DateTime.Now(), System.DateTime.Now.AddMinutes(30), persistCookie, "", "/")
-        cookiestr = FormsAuthentication.Encrypt(tkt)
+        lh.LoginForms(UserName, persistCookie, Context)
+        lh.LoginClaims(UserName, persistCookie, Context)
 
-        ck = New HttpCookie(FormsAuthentication.FormsCookieName(), cookiestr)
-        If persistCookie Then
-            ck.Expires = tkt.Expiration
-            ck.Path = FormsAuthentication.FormsCookiePath()
-            Response.Cookies.Add(ck)
-            Dim lh As New LoginHelper
-            lh.LoginClaims(UserName, persistCookie, Context)
-
-            Dim strRedirect As String = Request("ReturnURL")
-            If strRedirect = "" Then
-                strRedirect = "default.aspx"
-            End If
-
-            Response.Redirect(strRedirect, True)
-
+        Dim strRedirect As String = Request("ReturnURL")
+        If strRedirect = "" Then
+            strRedirect = "default.aspx"
         End If
 
+        Response.Redirect(strRedirect, True)
 
     End Sub
 
     Private Sub Logout()
-        Context.GetOwinContext.Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType)
-        FormsAuthentication.SignOut()
-        Dim cookie_name = ConfigurationManager.AppSettings("CookieName")
 
-        Dim cookie As HttpCookie
-        If Response.Cookies(cookie_name) IsNot Nothing Then
-            cookie = Response.Cookies(cookie_name)
-        ElseIf Request.Cookies(cookie_name) IsNot Nothing Then
-            cookie = Request.Cookies(cookie_name)
-        Else
-            cookie = New HttpCookie(cookie_name)
-        End If
-
-        cookie.Expires = DateTime.Now.AddMinutes(-1)
-        HttpContext.Current.Response.Cookies.Set(cookie)
-        HttpContext.Current.Request.Cookies.Remove(cookie_name)
-        HttpContext.Current.Request.Cookies.Clear()
-
-
+        Dim lh As New LoginHelper
+        lh.Logout(Context)
         Response.Redirect("~/")
     End Sub
 

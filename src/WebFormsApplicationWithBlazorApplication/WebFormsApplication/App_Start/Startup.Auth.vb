@@ -24,8 +24,8 @@ Partial Public Class Startup
             .Provider = New CookieAuthenticationProvider() With {
                 .OnValidateIdentity = Function(ctx)
                                           Dim ret = Task.Run(Function()
-                                                                 Dim userName As String = ""
                                                                  If HttpContext.Current IsNot Nothing Then
+                                                                     Dim userName As String = ""
                                                                      userName = System.Web.HttpContext.Current.User.Identity.Name
                                                                      Dim context As System.Web.HttpContext = HttpContext.Current
                                                                      Dim lh As New LoginHelper

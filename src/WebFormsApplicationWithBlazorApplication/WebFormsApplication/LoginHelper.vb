@@ -4,6 +4,23 @@ Imports Microsoft.AspNetCore.DataProtection
 Imports Microsoft.Owin.Security
 Imports Microsoft.Owin.Security.Cookies
 Public Class LoginHelper
+    Public Sub LoginForms(UserName As String, persistCookie As Boolean, ctx As HttpContext)
+        Dim tkt As FormsAuthenticationTicket
+        Dim cookiestr As String
+        Dim ck As HttpCookie
+
+        tkt = New FormsAuthenticationTicket(1, UserName, System.DateTime.Now(), System.DateTime.Now.AddMinutes(30), persistCookie, "", "/")
+        cookiestr = FormsAuthentication.Encrypt(tkt)
+
+        ck = New HttpCookie(FormsAuthentication.FormsCookieName(), cookiestr)
+        If persistCookie Then
+            ck.Expires = tkt.Expiration
+        End If
+
+        ck.Path = FormsAuthentication.FormsCookiePath()
+        ctx.Response.Cookies.Add(ck)
+
+    End Sub
     Public Function LoginClaims(UserName As String, persistCookie As Boolean, ctx As System.Web.HttpContext) As List(Of Claim)
         'create Identity from the Membership User, Roles
         Dim user = Membership.GetUser(UserName)
@@ -60,4 +77,25 @@ Public Class LoginHelper
         Return claims
 
     End Function
+
+    Public Sub Logout(ctx As HttpContext)
+        ctx.GetOwinContext.Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType)
+        FormsAuthentication.SignOut()
+        Dim cookie_name = ConfigurationManager.AppSettings("CookieName")
+
+        Dim cookie As HttpCookie
+        If ctx.Response.Cookies(cookie_name) IsNot Nothing Then
+            cookie = ctx.Response.Cookies(cookie_name)
+        ElseIf ctx.Request.Cookies(cookie_name) IsNot Nothing Then
+            cookie = ctx.Request.Cookies(cookie_name)
+        Else
+            cookie = New HttpCookie(cookie_name)
+        End If
+
+        cookie.Expires = DateTime.Now.AddMinutes(-1)
+        ctx.Response.Cookies.Set(cookie)
+        ctx.Request.Cookies.Remove(cookie_name)
+        ctx.Request.Cookies.Clear()
+
+    End Sub
 End Class
