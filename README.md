@@ -2,21 +2,21 @@
 This repository is meant to demonstrate how to integrate authentication from a ASP.NET Forms Authentication application with a separate Blazor application. 
 
 ## Background
-I have an old VB.NET Web Forms application using Forms Authentication with an aspnetdb Sql Server Database. I have been wanting to do new development using Blazor, but I didn't want my users to have to log on to both applications separately. The solution to the problem, in a nutshell, was to create a cookie which could be shared between the two applications which contains a ClaimsPrincipal object.  
+I have an old VB.NET Web Forms application using Forms Authentication using the old aspnetdb SQL Server Database. I have been wanting to do new development using Blazor, but I didn't want my users to have to log on to both applications separately. The solution to the problem, in a nutshell, was to create a cookie which could be shared between the two applications which contains a ClaimsPrincipal object.  
 
-It took me several weeks to figure out how to use my legacy Forms Authentication system with Blazor. Surprisingly, I could find almost no documentation on what I assume to be a pretty considerable use case.  The help documentation on the Microsoft website was at best a starting point. I have created this repository so that hopefully I can save somebody else this time.  
+It took me several weeks to figure out how to do this. Surprisingly, I could find almost no documentation on what I assume to be a pretty considerable use case.  The help documentation on the Microsoft website was, at best, a starting point. I have created this repository so that hopefully I can save somebody else this time.  
 
 The branches of this project are the various stages of integration of the two technologies:  
 
-1. Master is a new ASP.NET Web Forms project created by the Visual Studio wizard (note, no authentication added).  
-2. Step 1 is the modified ASP.NET Web Forms project to include all of the code and configuration changes to work with the Blazor App.
-3. Step 2 is the new Blazor Server application created by the Visual Studio wizard (note, no authentication added).
-4. Step 3 is the modified Blazor Server application to run with the Web Forms Authentication from the Web Forms project.
+1. Master is a new ASP.NET Web Forms project created by the Visual Studio wizard (note, no authentication added by the wizard).  
+2. Step 1 is the modified ASP.NET Web Forms project to include all of the code and configuration changes to work with the Blazor App (prior to any subsequent modifications I have made to the current branch (Step 3)).
+3. Step 2 is the new Blazor Server application created by the Visual Studio wizard (note, no authentication added by the wizard).
+4. Step 3 is the modified Blazor Server application to run with Forms Authentication from the Web Forms project.
 
 **Several Notes**: 
 1.  All authentication is handled by the Web Forms application.  
 2.  If you are running this through Visual Studio/IIS Express, you will need to make sure both websites are running.  
-3.  The Blazor app may need to be refreshed after logging in or out.   
+3.  The Blazor app may need to be refreshed after logging in or out (something I will work on to avoid).
 4.  This solution will not work on a server farm because it uses a file location to manage a shared key between the applications.
 If you are interested in a server farm solution, this article provides some guidance:
 https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-3.1
