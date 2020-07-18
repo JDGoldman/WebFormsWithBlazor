@@ -98,48 +98,6 @@ Save the newly created AuthenticationTicket in an HttpCookie to be shared by bot
         ctx.Response.Cookies.Add(ck)
 ```
 
-### 6. Make Corresponding Changes in the Owin Startup Class
-
-You will need to make changes to the Owin Startup class (in the ConfigAuth subroutine) to add the same functionality as in the LoginHelper.vb class.  
-```html
-        app.UseCookieAuthentication(New CookieAuthenticationOptions() With {
-            .AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-            .AuthenticationMode = Microsoft.Owin.Security.AuthenticationMode.Active,
-            .CookieDomain = domain_name,
-            .CookieHttpOnly = False,
-            .CookieName = cookie_name,
-            .CookieSecure = CookieSecureOption.SameAsRequest,
-            .LoginPath = New PathString("/Login.aspx"),
-            .Provider = New CookieAuthenticationProvider() With {
-                .OnValidateIdentity = Function(ctx)
-                                          Dim ret = Task.Run(Function()
-                                                                 If HttpContext.Current IsNot Nothing Then
-                                                                     Dim userName As String = ""
-                                                                     userName = System.Web.HttpContext.Current.User.Identity.Name
-                                                                     Dim context As System.Web.HttpContext = HttpContext.Current
-                                                                     Dim lh As New LoginHelper
-                                                                     Dim claims = lh.LoginClaims(userName, True, context)
-                                                                     Return claims
-                                                                 Else
-                                                                     Return Task.FromResult(0)
-                                                                 End If
-                                                             End Function)
-                                          Return ret
-                                      End Function
-               },
-        .TicketDataFormat = New AspNetTicketDataFormat(
-             New DataProtectorShim(
-                DataProtectionProvider.Create(New System.IO.DirectoryInfo(location),
-                Function(Builder) {Builder.SetApplicationName(application_name)}).CreateProtector(
-                "Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware",
-                cookie_name,
-                "v2"))),
-                .CookieManager = New ChunkingCookieManager()
-            })
-
-        System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-
-```
 
 ## Modifications to Blazor Application
 
@@ -216,7 +174,7 @@ You will need to add the CascadingAuthenticationState tag around your existing A
 ## Conclusion
 With these changes to the Web Forms Application and the Blazor Application, you can now use FormsAuthentication with a server-side Blazor application.  
 
-I really hope this solution is helpful to somebody out there.  I have pushed this out quickly as soon as I figured it out so that I could potentially save somebody else the task of figuring this out.  I will try to refine this code more as I put it into production.  For example, I need to verify if I need the configuration settings in the Owin Startup class -- if we are not really using Owin, we probably don't need it.  
+I really hope this solution is helpful to somebody out there.  I have pushed this out quickly as soon as I figured it out so that I could potentially save somebody else the task of figuring this out.  I will try to refine this code more as I put it into production.  
 
 ## Sources / References
 1. https://docs.microsoft.com/en-us/aspnet/core/security/cookie-sharing?view=aspnetcore-3.1
