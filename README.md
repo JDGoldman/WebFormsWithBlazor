@@ -212,3 +212,7 @@ You will need to add the CascadingAuthenticationState tag around your existing A
     </Router>
 </CascadingAuthenticationState>
 ```
+## Conclusion
+With these changes to the Web Forms Application and the Blazor Application, you can now use FormsAuthentication with a server-side Blazor application.  
+
+I really hope this solution is helpful to somebody out there.  I have pushed this out quickly as soon as I figured it out so that I could potentially save somebody else the task of figuring this out.  I will try to refine this code more as I put it into production.  For example, I need to verify if I need the configuration settings in the Owin Startup class -- if we are not really using Owin, we probably don't need it.  
