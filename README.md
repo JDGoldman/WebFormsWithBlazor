@@ -218,9 +218,9 @@ With these changes to the Web Forms Application and the Blazor Application, you 
 I really hope this solution is helpful to somebody out there.  I have pushed this out quickly as soon as I figured it out so that I could potentially save somebody else the task of figuring this out.  I will try to refine this code more as I put it into production.  For example, I need to verify if I need the configuration settings in the Owin Startup class -- if we are not really using Owin, we probably don't need it.  
 
 ## Sources / References
-https://docs.microsoft.com/en-us/aspnet/core/security/cookie-sharing?view=aspnetcore-3.1
-https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-3.1&tabs=aspnetcore2x
-https://docs.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-3.1
+1. https://docs.microsoft.com/en-us/aspnet/core/security/cookie-sharing?view=aspnetcore-3.1
+2. https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-3.1&tabs=aspnetcore2x
+3. https://docs.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-3.1
 My claims.razor class comes from the above page. 
-https://stackoverflow.com/questions/42842511/how-to-manually-decrypt-an-asp-net-core-authentication-cookie
+4. https://stackoverflow.com/questions/42842511/how-to-manually-decrypt-an-asp-net-core-authentication-cookie
 
