@@ -144,6 +144,14 @@ You will need to make changes to the Owin Startup class (in the ConfigAuth subro
 
 ### 1. Add services to Startup
 
+We will need to access the HttpContext for purposes of retrieving the shared cookie value, so we need to add the following code to our Startup services:
+```html
+            services.AddHttpContextAccessor();
+            services.AddScoped<HttpContextAccessor>();
+            services.AddHttpClient();
+            services.AddScoped<HttpClient>();
+```
+
 You will need to add the same DataProtector to your Startup class:
 ```html
             services.AddDataProtection()
