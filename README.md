@@ -61,7 +61,7 @@ And then, taking these Claims, create a new ClaimsPrincipal which can be used by
        Dim principal = New ClaimsPrincipal(identity)
 ```
 
-Next, create a DataProtector which will be used by both applications:
+Next, create a DataProtector which will be used by both applications.  You need to set the ApplicationName for both applications to the same value, and you need to use the same values in both applications for the CreateProtector logic.  
 
 ```html
         Dim provider = DataProtectionProvider.Create(New System.IO.DirectoryInfo(location),
