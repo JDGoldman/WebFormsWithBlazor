@@ -22,7 +22,7 @@ If you are interested in a server farm solution, this article provides some guid
 https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-3.1
 
 
-## Project Setup
+## Database Setup
 
 The premise of this application is that you already have an old, Web Forms Forms Authentication application setup,
 so you shouldn't need to create a new database.  You can just use your existing one. No changes are made to your database by this application. 
