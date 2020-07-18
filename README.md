@@ -224,4 +224,5 @@ I really hope this solution is helpful to somebody out there.  I have pushed thi
 3. https://docs.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-3.1
 My claims.razor class comes from this page. 
 4. https://stackoverflow.com/questions/42842511/how-to-manually-decrypt-an-asp-net-core-authentication-cookie
+5. http://blazorhelpwebsite.com/Blog/tabid/61/EntryId/4316/A-Demonstration-of-Simple-Server-side-Blazor-Cookie-Authentication.aspx
 
