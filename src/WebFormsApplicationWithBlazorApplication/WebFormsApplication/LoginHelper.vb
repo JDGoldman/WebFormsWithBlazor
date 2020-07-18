@@ -4,23 +4,23 @@ Imports Microsoft.AspNetCore.DataProtection
 Imports Microsoft.Owin.Security
 Imports Microsoft.Owin.Security.Cookies
 Public Class LoginHelper
-    Public Sub LoginForms(UserName As String, persistCookie As Boolean, ctx As HttpContext)
-        Dim tkt As FormsAuthenticationTicket
-        Dim cookiestr As String
-        Dim ck As HttpCookie
+    'Public Sub LoginForms(UserName As String, persistCookie As Boolean, ctx As HttpContext)
+    '    Dim tkt As FormsAuthenticationTicket
+    '    Dim cookiestr As String
+    '    Dim ck As HttpCookie
 
-        tkt = New FormsAuthenticationTicket(1, UserName, System.DateTime.Now(), System.DateTime.Now.AddMinutes(30), persistCookie, "", "/")
-        cookiestr = FormsAuthentication.Encrypt(tkt)
+    '    tkt = New FormsAuthenticationTicket(1, UserName, System.DateTime.Now(), System.DateTime.Now.AddMinutes(30), persistCookie, "", "/")
+    '    cookiestr = FormsAuthentication.Encrypt(tkt)
 
-        ck = New HttpCookie(FormsAuthentication.FormsCookieName(), cookiestr)
-        If persistCookie Then
-            ck.Expires = tkt.Expiration
-        End If
+    '    ck = New HttpCookie(FormsAuthentication.FormsCookieName(), cookiestr)
+    '    If persistCookie Then
+    '        ck.Expires = tkt.Expiration
+    '    End If
 
-        ck.Path = FormsAuthentication.FormsCookiePath()
-        ctx.Response.Cookies.Add(ck)
+    '    ck.Path = FormsAuthentication.FormsCookiePath()
+    '    ctx.Response.Cookies.Add(ck)
 
-    End Sub
+    'End Sub
     Public Function LoginClaims(UserName As String, persistCookie As Boolean, ctx As System.Web.HttpContext) As List(Of Claim)
         'create Identity from the Membership User, Roles
         Dim user = Membership.GetUser(UserName)
@@ -65,10 +65,10 @@ Public Class LoginHelper
         }
 
 
-        'Add cookie
+        'Add shared cookie
         ctx.Response.Cookies.Add(ck)
 
-        'Sign in for Owin
+        'Sign in for Owin if needed
         Dim props As New Microsoft.Owin.Security.AuthenticationProperties With {
             .IsPersistent = persistCookie
         }

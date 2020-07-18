@@ -14,6 +14,7 @@ Public Class Login
 
     Private Sub btnSubmit_Click(sender As Object, e As EventArgs) Handles btnSubmit.Click
         If tbUserName.Text.Length > 0 And tbPassword.Text.Length > 0 Then 'perform other validation logic as needed
+            'FormsAuthentication.Authenticate(tbUserName.Text, tbPassword.Text) has been deprecated
             If Membership.ValidateUser(tbUserName.Text, tbPassword.Text) Then
                 Logon(tbUserName.Text)
             Else
@@ -27,7 +28,8 @@ Public Class Login
         Dim lh As New LoginHelper
         Dim persistCookie As Boolean = True
 
-        lh.LoginForms(UserName, persistCookie, Context)
+        FormsAuthentication.SetAuthCookie(UserName, persistCookie)
+        'lh.LoginForms(UserName, persistCookie, Context)
         lh.LoginClaims(UserName, persistCookie, Context)
 
         Dim strRedirect As String = Request("ReturnURL")
