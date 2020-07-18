@@ -221,6 +221,6 @@ I really hope this solution is helpful to somebody out there.  I have pushed thi
 1. https://docs.microsoft.com/en-us/aspnet/core/security/cookie-sharing?view=aspnetcore-3.1
 2. https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-3.1&tabs=aspnetcore2x
 3. https://docs.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-3.1
-My claims.razor class comes from the above page. 
+My claims.razor class comes from this page. 
 4. https://stackoverflow.com/questions/42842511/how-to-manually-decrypt-an-asp-net-core-authentication-cookie
 
