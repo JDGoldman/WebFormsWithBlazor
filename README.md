@@ -38,7 +38,7 @@ You will need to modify your web.config file in three spots to use your own "App
 2. In the Membership Provider Key for applicationName.
 3. In the Role Manager Key for applicationName.  
 
-## Authorization Changes
+## Modifications to Web Forms Application 
 
 ### 1. Add logic to Web Forms application to create Claims from Membership User.  
 
@@ -56,13 +56,15 @@ The first step is to create a Claims object for the authenticated user from the 
             Next
         End If
 ```
-And then, taking these Claims, create a new ClaimsPrincipal which can be used by the Blazor App:
+
+### 2. Create a ClaimsPrincipal object
+Taking the Claims created in step 1 above, create a new ClaimsPrincipal which can be used by the Blazor App:
 ```html
        Dim identity = New ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationType)
        Dim principal = New ClaimsPrincipal(identity)
 ```
-
-Next, create a DataProtector which will be used by both applications.  You need to set the ApplicationName for both applications to the same value, and you need to use the same values in both applications for the CreateProtector logic.  
+### 3. Create a DataProtector
+Create a DataProtector which will be used by both applications.  You need to set the ApplicationName for both applications to the same value, and you need to use the same values in both applications for the CreateProtector logic.  
 
 ```html
         Dim provider = DataProtectionProvider.Create(New System.IO.DirectoryInfo(location),
@@ -73,6 +75,7 @@ Next, create a DataProtector which will be used by both applications.  You need 
                 "v2")
 ```
 
+### 4. Create an AuthenticationTicket
 Use this DataProtector to create an AuthenticationTicket which can be consumed by the ASP.NET Core (Blazor) application.
 ```html
         'use data protector to protect ticket
@@ -80,7 +83,8 @@ Use this DataProtector to create an AuthenticationTicket which can be consumed b
         Dim tkt = New Microsoft.AspNetCore.Authentication.AuthenticationTicket(principal, "Cookies")
         Dim protectedTkt = ticketFormat.Protect(tkt)
 ```
-Finally, set the HttpCookie to be shared by both applications:
+### 5. Save the AuthenticationTicket in a Cookie
+Save the newly created AuthenticationTicket in an HttpCookie to be shared by both applications.
 ```html
         Dim ck As HttpCookie = New HttpCookie(cookie_name, protectedTkt) With {
             .Domain = domain_name,
