@@ -55,5 +55,41 @@ First step is to create a Claims for the authenticated user from the existing Me
             Next
         End If
 ```
+And then, taking these Claims, create a new ClaimsPrincipal which can be used by the Blazor App:
+```html
+       Dim identity = New ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationType)
+       Dim principal = New ClaimsPrincipal(identity)
+```
+
+Next, create a DataProtector which will be used by both applications:
+
+```html
+        Dim provider = DataProtectionProvider.Create(New System.IO.DirectoryInfo(location),
+                Function(Builder) {Builder.SetApplicationName(application_name)})
+        Dim protector = provider.CreateProtector(
+                "Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware",
+                cookie_name,
+                "v2")
+```
+
+Use this DataProtector to create an AuthenticationTicket which can be consumed by the ASP.NET Core (Blazor) application.
+```html
+        'use data protector to protect ticket
+        Dim ticketFormat = New Microsoft.AspNetCore.Authentication.TicketDataFormat(protector)
+        Dim tkt = New Microsoft.AspNetCore.Authentication.AuthenticationTicket(principal, "Cookies")
+        Dim protectedTkt = ticketFormat.Protect(tkt)
+```
+Finally, set the HttpCookie to be shared by both applications:
+```html
+        Dim ck As HttpCookie = New HttpCookie(cookie_name, protectedTkt) With {
+            .Domain = domain_name,
+            .Path = "/",
+            .Expires = Date.Now.AddMinutes(60),
+            .HttpOnly = False
+        }
+
+        'Add shared cookie
+        ctx.Response.Cookies.Add(ck)
+```
 
 
