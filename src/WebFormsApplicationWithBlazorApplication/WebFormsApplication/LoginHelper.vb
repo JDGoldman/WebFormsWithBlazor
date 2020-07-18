@@ -64,7 +64,6 @@ Public Class LoginHelper
             .HttpOnly = False
         }
 
-
         'Add shared cookie
         ctx.Response.Cookies.Add(ck)
 

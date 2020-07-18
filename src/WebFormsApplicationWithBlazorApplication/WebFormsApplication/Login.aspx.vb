@@ -37,6 +37,9 @@ Public Class Login
             strRedirect = "default.aspx"
         End If
 
+        'or:
+        'strRedirect = FormsAuthentication.GetRedirectUrl(UserName, persistCookie)
+
         Response.Redirect(strRedirect, True)
 
     End Sub
