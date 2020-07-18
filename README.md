@@ -194,3 +194,21 @@ Next, create the DataProtector with the same configuration values as those in th
         AuthenticationTicket ticket = ticketFormat.Unprotect(cookieString);
 ```
 If the ticket has a Principal, return that value from the function.  If not, create a new, blank ClaimsPrincipal and return that.  
+
+### 3. Wrap App.Razor with Cascading Authentication State tag
+
+You will need to add the CascadingAuthenticationState tag around your existing App.Razor markup to trigger the custom AuthenticationStateProvider and access Authentication information.  Here is my whole App.Razor file.
+```html
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+```
