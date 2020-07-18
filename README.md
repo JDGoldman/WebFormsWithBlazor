@@ -38,3 +38,22 @@ You will need to modify your web.config file in three spots to use your own "App
 2. In the Membership Provider Key for applicationName.
 3. In the Role Manager Key for applicationName.  
 
+## Authorization Changes
+
+### 1. Add logic to Web Forms application to create Claims from Membership User.  
+
+First step is to create a Claims for the authenticated user from the existing Membership User:
+```html
+        Dim user = Membership.GetUser(UserName)
+        Dim claims = New List(Of Claim)()
+        claims.Add(New Claim(ClaimTypes.Name, UserName))
+        claims.Add(New Claim(ClaimTypes.NameIdentifier, user.ProviderUserKey.ToString))
+
+        If Roles.Enabled Then
+            For Each role In Roles.GetRolesForUser(UserName)
+                claims.Add(New Claim(ClaimTypes.Role, role))
+            Next
+        End If
+```
+
+
