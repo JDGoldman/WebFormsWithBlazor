@@ -1,7 +1,8 @@
 # Web Forms Authentication With Blazor Application
 This repository is meant to demonstrate how to integrate authentication from a ASP.NET Forms Authentication application with a separate Blazor application. 
 
-**Background**: I have an old VB.NET Web Forms application using Forms Authentication. I have been wanting to start all new development using Blazor, but I didn't want my users to have to log on to both applications separately. It took me several weeks to figure out how to use my legacy Forms Authentication system with Blazor. The help documentation on the Microsoft website was extremely misleading. I have created this repository so that hopefully I can save somebody else this time.  The solution to the problem, in a nutshell, was to create a cookie which could be shared between the two applications which contains a ClaimsPrincipal object.  Actually figuring out how to implement this took a ton of time.
+## Background
+I have an old VB.NET Web Forms application using Forms Authentication. I have been wanting to start all new development using Blazor, but I didn't want my users to have to log on to both applications separately. It took me several weeks to figure out how to use my legacy Forms Authentication system with Blazor. The help documentation on the Microsoft website was extremely misleading. I have created this repository so that hopefully I can save somebody else this time.  The solution to the problem, in a nutshell, was to create a cookie which could be shared between the two applications which contains a ClaimsPrincipal object.  Actually figuring out how to implement this took a ton of time.
 
 The branches of this project are the various stages of integration of the two technologies:  
 
