@@ -142,3 +142,28 @@ You will need to make changes to the Owin Startup class (in the ConfigAuth subro
 
 ## Modifications to Blazor Application
 
+### 1. Add services to Startup
+
+You will need to add the same DataProtector to your Startup class:
+```html
+            services.AddDataProtection()
+                .ProtectKeysWithDpapi().DisableAutomaticKeyGeneration()
+                .PersistKeysToFileSystem(new System.IO.DirectoryInfo(shared_key_location))
+                .SetApplicationName(application_name);
+```
+And add Authetication/Authorization as well:
+```html
+           services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.Cookie.Name = cookie_name;
+                    options.Cookie.Path = "/";
+                    options.Cookie.Domain = domain_name;
+                    options.Cookie.SameSite = SameSiteMode.Lax;
+                    options.Cookie.HttpOnly = false;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                    options.Cookie.IsEssential = true;
+                }
+                );
+            services.AddAuthorization();
+```
