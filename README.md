@@ -2,7 +2,7 @@
 This repository is meant to demonstrate how to integrate authentication from a ASP.NET Forms Authentication application with a separate Blazor application. 
 
 ## Background
-I have an old VB.NET Web Forms application using Forms Authentication using the old aspnetdb SQL Server Database. I have been wanting to do new development using Blazor, but I didn't want my users to have to log on to both applications separately. The solution to the problem, in a nutshell, was to create a cookie which could be shared between the two applications which contains a ClaimsPrincipal object.  
+I have an old VB.NET Web Forms application using Forms Authentication with the old aspnetdb SQL Server Database. I have been wanting to do new development using Blazor, but I didn't want my users to have to log on to both applications separately. The solution to the problem, in a nutshell, was to create a cookie which could be shared between the two applications which contains a ClaimsPrincipal object.  
 
 It took me several weeks to figure out how to do this. Surprisingly, I could find almost no documentation on what I assume to be a pretty considerable use case.  The help documentation on the Microsoft website was, at best, a starting point. I have created this repository so that hopefully I can save somebody else this time.  
 
