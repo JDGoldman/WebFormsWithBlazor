@@ -175,3 +175,22 @@ And add Authetication/Authorization as well:
                 );
             services.AddAuthorization();
 ```
+### 2. Add new AuthenticationStateProvider
+
+We need to create a custom AuthenticationStateProvider to override the default AuthenticationStateProvider. I have done this in the CustomAuthStateProviderClass:
+```html
+        public class CustomAuthStateProvider : AuthenticationStateProvider
+```
+The logic all occurs in the GetAuthenticationStateAsync function where we retrive to cookie value, unprotect it using the same DataProtector configured the same way, and then convert it into a ClaimsPrincipal which is the return value for the function.
+
+First, you need to get the cookie value.  I struggled with getting the value -- I kept getting the name of the cookie or the name of the object, but not the actual value.  TryGetValue finally worked for me.
+```html
+        var result = _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(cookie_name, out cookieString);
+```
+Next, create the DataProtector with the same configuration values as those in the Web Forms application, and use it to Unprotect the cookie value and transform it into an AuthenticationTicket.  
+```html
+        var dataProtector = provider.CreateProtector("Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware", cookie_name, "v2");
+        var ticketFormat = new Microsoft.AspNetCore.Authentication.TicketDataFormat(dataProtector);
+        AuthenticationTicket ticket = ticketFormat.Unprotect(cookieString);
+```
+If the ticket has a Principal, return that value from the function.  If not, create a new, blank ClaimsPrincipal and return that.  
