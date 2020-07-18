@@ -42,7 +42,8 @@ You will need to modify your web.config file in three spots to use your own "App
 
 ### 1. Add logic to Web Forms application to create Claims from Membership User.  
 
-First step is to create a Claims for the authenticated user from the existing Membership User:
+The first step is to create a Claims object for the authenticated user from the existing Membership User.  The Claims object will be used in the next step to create a ClaimsPrincipal which is the Authorization/Authentication format needed by the Blazor application.
+
 ```html
         Dim user = Membership.GetUser(UserName)
         Dim claims = New List(Of Claim)()
