@@ -65,7 +65,7 @@ Taking the Claims created in step 1 above, create a new ClaimsPrincipal which ca
        Dim principal = New ClaimsPrincipal(identity)
 ```
 ### 3. Create a DataProtector
-Create a DataProtector which will be used by both applications.  You need to set the ApplicationName for both applications to the same value, and you need to use the same values in both applications for the CreateProtector logic.  
+Create a DataProtector object using the same configuration which will be used by your Blazor App.  Both applications will need to have a DataProtector object configured the same way with a key file shared between them. I put mine in C\Temp\Web\Shared, but you can choose any location on your local machine which you prefer (and the web server can access).  You will need to set the ApplicationName for both applications to the same value, and the rest of the values in both applications for the CreateProtector logic need to be the same as well.  
 
 ```html
         Dim provider = DataProtectionProvider.Create(New System.IO.DirectoryInfo(location),
@@ -77,7 +77,7 @@ Create a DataProtector which will be used by both applications.  You need to set
 ```
 
 ### 4. Create an AuthenticationTicket
-Use this DataProtector to create an AuthenticationTicket which can be consumed by the ASP.NET Core (Blazor) application.
+Use the DataProtector as the seed for the TicketDataFormat.  Then create an AuthenticationTicket using the ClaimsPrincipal object crated in step 2 above.  Use the DataProtector to protect an AuthenticationTicket which can be consumed by the ASP.NET Core (Blazor) application.
 ```html
         'use data protector to protect ticket
         Dim ticketFormat = New Microsoft.AspNetCore.Authentication.TicketDataFormat(protector)
