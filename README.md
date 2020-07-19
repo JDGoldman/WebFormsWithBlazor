@@ -104,7 +104,7 @@ Save the newly created AuthenticationTicket in an HttpCookie to be shared by bot
 ### 1. Add services to Startup
 
 We will need to access the HttpContext for purposes of retrieving the shared cookie value, so we need to add the following code to our Startup services:
-```html
+```cs
             services.AddHttpContextAccessor();
             services.AddScoped<HttpContextAccessor>();
             services.AddHttpClient();
@@ -112,14 +112,14 @@ We will need to access the HttpContext for purposes of retrieving the shared coo
 ```
 
 You will need to add the same DataProtector to your Startup class:
-```html
+```cs
             services.AddDataProtection()
                 .ProtectKeysWithDpapi().DisableAutomaticKeyGeneration()
                 .PersistKeysToFileSystem(new System.IO.DirectoryInfo(shared_key_location))
                 .SetApplicationName(application_name);
 ```
 And add Authetication/Authorization as well:
-```html
+```cs
            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
@@ -137,17 +137,17 @@ And add Authetication/Authorization as well:
 ### 2. Add new AuthenticationStateProvider
 
 We need to create a custom AuthenticationStateProvider to override the default AuthenticationStateProvider. I have done this in the CustomAuthStateProviderClass:
-```html
+```cs
         public class CustomAuthStateProvider : AuthenticationStateProvider
 ```
 The logic all occurs in the GetAuthenticationStateAsync function where we retrive to cookie value, unprotect it using the same DataProtector configured the same way, and then convert it into a ClaimsPrincipal which is the return value for the function.
 
 First, you need to get the cookie value.  I struggled with getting the value -- I kept getting the name of the cookie or the name of the object, but not the actual value.  TryGetValue finally worked for me.
-```html
+```cs
         var result = _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(cookie_name, out cookieString);
 ```
 Next, create the DataProtector with the same configuration values as those in the Web Forms application, and use it to Unprotect the cookie value and transform it into an AuthenticationTicket.  
-```html
+```cs
         var dataProtector = provider.CreateProtector("Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware", cookie_name, "v2");
         var ticketFormat = new Microsoft.AspNetCore.Authentication.TicketDataFormat(dataProtector);
         AuthenticationTicket ticket = ticketFormat.Unprotect(cookieString);
