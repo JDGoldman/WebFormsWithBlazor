@@ -53,6 +53,7 @@
                         <li><a runat="server" href="~/">Home</a></li>
                         <li><a runat="server" href="~/About">About</a></li>
                         <li><a runat="server" href="~/Contact">Contact</a></li>
+                        <li><a runat="server" href="~/VouchersAndPackages">Vouchers</a></li>
                         <% If Not System.Web.HttpContext.Current.User.Identity.IsAuthenticated Then %>
                             <li><a runat="server" href="~/Login.aspx">Login</a></li>
                         <% End If %>
