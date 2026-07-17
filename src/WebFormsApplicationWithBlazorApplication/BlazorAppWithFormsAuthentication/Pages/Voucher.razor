@@ -1,0 +1,64 @@
+@page "/voucher/{VoucherId:int}"
+
+<PageTitle>Voucher @VoucherId</PageTitle>
+
+<h1>Voucher Details</h1>
+
+@if (_voucher == null)
+{
+    <p>Voucher @VoucherId was not found.</p>
+}
+else
+{
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">@_voucher.Name</h2>
+            <dl class="row">
+                <dt class="col-sm-3">Voucher ID</dt>
+                <dd class="col-sm-9">@_voucher.Id</dd>
+
+                <dt class="col-sm-3">Code</dt>
+                <dd class="col-sm-9">@_voucher.Code</dd>
+
+                <dt class="col-sm-3">Amount</dt>
+                <dd class="col-sm-9 text-right">@_voucher.Amount.ToString("C")</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">@_voucher.Status</dd>
+            </dl>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int VoucherId { get; set; }
+
+    private VoucherDetails _voucher;
+
+    protected override void OnParametersSet()
+    {
+        _voucher = VoucherDetails.GetById(VoucherId);
+    }
+
+    private sealed class VoucherDetails
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public decimal Amount { get; set; }
+        public string Status { get; set; }
+
+        private static readonly VoucherDetails[] SampleVouchers =
+        {
+            new VoucherDetails { Id = 1, Name = "Spring Promotion", Code = "SPRING2026", Amount = 50.00m, Status = "Active" },
+            new VoucherDetails { Id = 2, Name = "Loyalty Reward", Code = "LOYAL100", Amount = 100.00m, Status = "Active" },
+            new VoucherDetails { Id = 3, Name = "Holiday Package", Code = "HOLIDAY25", Amount = 25.00m, Status = "Redeemed" }
+        };
+
+        public static VoucherDetails GetById(int id)
+        {
+            return SampleVouchers.FirstOrDefault(voucher => voucher.Id == id);
+        }
+    }
+}
