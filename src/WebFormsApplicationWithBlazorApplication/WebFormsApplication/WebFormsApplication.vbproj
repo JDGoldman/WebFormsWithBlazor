@@ -310,6 +310,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="VouchersAndPackages.aspx" />
+    <Content Include="ReturnsToVendor.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -376,6 +377,13 @@
     </Compile>
     <Compile Include="VouchersAndPackages.aspx.vb">
       <DependentUpon>VouchersAndPackages.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ReturnsToVendor.aspx.designer.vb">
+      <DependentUpon>ReturnsToVendor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReturnsToVendor.aspx.vb">
+      <DependentUpon>ReturnsToVendor.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Login.aspx.designer.vb">

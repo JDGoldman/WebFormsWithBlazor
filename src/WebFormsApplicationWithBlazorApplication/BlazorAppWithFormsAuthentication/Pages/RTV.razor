@@ -1,0 +1,211 @@
+@page "/rtv/{RtvId:int}"
+@inject IRtvLinkedFileService LinkedFileService
+
+<PageTitle>RTV @RtvId</PageTitle>
+
+<h1>Return To Vendor</h1>
+
+@if (_rtv == null)
+{
+    <p>RTV @RtvId was not found.</p>
+}
+else
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">@_rtv.VendorName</h2>
+            <dl class="row mb-0">
+                <dt class="col-sm-3">RTV ID</dt>
+                <dd class="col-sm-9">@_rtv.Id</dd>
+
+                <dt class="col-sm-3">Reference</dt>
+                <dd class="col-sm-9">@_rtv.ReferenceNumber</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">@_rtv.Status</dd>
+
+                <dt class="col-sm-3">Created</dt>
+                <dd class="col-sm-9">@_rtv.CreatedDate.ToShortDateString()</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Linked Files</h3>
+            <p class="text-muted">Drag and drop files onto the area below, or click to browse.</p>
+
+            <div class="rtv-drop-zone">
+                <InputFile OnChange="OnFilesSelectedAsync"
+                           multiple
+                           class="rtv-drop-zone-input"
+                           disabled="@_isUploading" />
+                <div class="rtv-drop-zone-content">
+                    @if (_isUploading)
+                    {
+                        <span>Uploading...</span>
+                    }
+                    else
+                    {
+                        <span class="oi oi-cloud-upload" aria-hidden="true"></span>
+                        <span>Drop files here or click to browse</span>
+                    }
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(_uploadMessage))
+            {
+                <div class="alert @(_uploadFailed ? "alert-danger" : "alert-success") mt-3" role="alert">
+                    @_uploadMessage
+                </div>
+            }
+
+            @if (_linkedFiles.Count == 0)
+            {
+                <p class="text-muted mt-3 mb-0">No linked files have been uploaded yet.</p>
+            }
+            else
+            {
+                <table class="table table-striped mt-3 mb-0">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th class="text-right">Size</th>
+                            <th>Uploaded</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var linkedFile in _linkedFiles)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@GetDownloadUrl(linkedFile.Id)" target="_blank" rel="noopener noreferrer">
+                                        @linkedFile.OriginalFileName
+                                    </a>
+                                </td>
+                                <td class="text-right">@FormatFileSize(linkedFile.SizeBytes)</td>
+                                <td>@linkedFile.UploadedAtUtc.ToLocalTime().ToString("g")</td>
+                                <td class="text-right">
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger"
+                                            disabled="@_isUploading"
+                                            @onclick="() => DeleteFileAsync(linkedFile.Id)">
+                                        Remove
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int RtvId { get; set; }
+
+    private RtvDetails _rtv;
+    private List<RtvLinkedFile> _linkedFiles = new List<RtvLinkedFile>();
+    private bool _isUploading;
+    private bool _uploadFailed;
+    private string _uploadMessage;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _rtv = RtvDetails.GetById(RtvId);
+        await LoadLinkedFilesAsync();
+    }
+
+    private async Task LoadLinkedFilesAsync()
+    {
+        var files = await LinkedFileService.GetFilesAsync(RtvId);
+        _linkedFiles = files.ToList();
+    }
+
+    private async Task OnFilesSelectedAsync(InputFileChangeEventArgs e)
+    {
+        _uploadFailed = false;
+        _uploadMessage = null;
+        _isUploading = true;
+
+        try
+        {
+            var uploadedCount = 0;
+            foreach (var file in e.GetMultipleFiles())
+            {
+                await LinkedFileService.SaveFileAsync(RtvId, file);
+                uploadedCount++;
+            }
+
+            await LoadLinkedFilesAsync();
+            _uploadMessage = uploadedCount == 1
+                ? "1 file uploaded successfully."
+                : $"{uploadedCount} files uploaded successfully.";
+        }
+        catch (Exception ex)
+        {
+            _uploadFailed = true;
+            _uploadMessage = ex.Message;
+        }
+        finally
+        {
+            _isUploading = false;
+        }
+    }
+
+    private async Task DeleteFileAsync(string fileId)
+    {
+        _uploadFailed = false;
+        _uploadMessage = null;
+
+        if (await LinkedFileService.DeleteFileAsync(RtvId, fileId))
+        {
+            await LoadLinkedFilesAsync();
+            _uploadMessage = "File removed.";
+        }
+    }
+
+    private string GetDownloadUrl(string fileId)
+    {
+        return $"/api/rtv/{RtvId}/files/{fileId}";
+    }
+
+    private static string FormatFileSize(long bytes)
+    {
+        if (bytes < 1024)
+        {
+            return $"{bytes} B";
+        }
+
+        if (bytes < 1024 * 1024)
+        {
+            return $"{bytes / 1024.0:0.#} KB";
+        }
+
+        return $"{bytes / (1024.0 * 1024.0):0.#} MB";
+    }
+
+    private sealed class RtvDetails
+    {
+        public int Id { get; set; }
+        public string VendorName { get; set; }
+        public string ReferenceNumber { get; set; }
+        public string Status { get; set; }
+        public DateTime CreatedDate { get; set; }
+
+        private static readonly RtvDetails[] SampleRtvs =
+        {
+            new RtvDetails { Id = 1, VendorName = "Acme Supplies", ReferenceNumber = "RTV-2026-001", Status = "Open", CreatedDate = new DateTime(2026, 7, 10) },
+            new RtvDetails { Id = 2, VendorName = "Northern Textiles", ReferenceNumber = "RTV-2026-002", Status = "Pending Approval", CreatedDate = new DateTime(2026, 7, 12) },
+            new RtvDetails { Id = 3, VendorName = "City Wholesale", ReferenceNumber = "RTV-2026-003", Status = "Closed", CreatedDate = new DateTime(2026, 6, 28) }
+        };
+
+        public static RtvDetails GetById(int id)
+        {
+            return SampleRtvs.FirstOrDefault(rtv => rtv.Id == id);
+        }
+    }
+}

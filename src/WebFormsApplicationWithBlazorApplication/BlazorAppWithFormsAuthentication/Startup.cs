@@ -19,6 +19,7 @@ using System.Net.Http;
 using System.Net;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using BlazorAppWithFormsAuthentication.Data;
+using BlazorAppWithFormsAuthentication.Services;
 
 namespace BlazorAppWithFormsAuthentication
 {
@@ -69,7 +70,9 @@ namespace BlazorAppWithFormsAuthentication
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddControllers();
             services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<IRtvLinkedFileService, RtvLinkedFileService>();
             //added for authentication
             services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 
@@ -102,6 +105,7 @@ namespace BlazorAppWithFormsAuthentication
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

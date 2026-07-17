@@ -5,3 +5,4 @@
 /.vs/slnx.sqlite-journal
 bin
 obj
+**/App_Data/RtvFiles/**
